@@ -2,31 +2,35 @@ import numpy as np
 import pandas as pd
 import pandas_datareader as pdr
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 import datetime
 import yfinance
+
+#start = datetime.datetime(2021, 10, 25)
+#end = datetime.datetime.now()
 
 plt.style.use("dark_background")
 
 ticker = str(input("Enter Ticker Symbol : "))
+in_peiod = str(input("Enter Period : "))
+in_interval = str(input("Enter Interval : "))
+com = yfinance.Ticker(ticker)
+company_name = com.info['longName']
 		
-
-def makeplot():
+def animate(i):
 	
-	start = datetime.datetime(2021, 10, 25)
-	end = datetime.datetime.now()
-
-
-	stock = yfinance.download(tickers= ticker, period='1d', interval='1m')
+	stock = yfinance.download(tickers= ticker, period= in_peiod, interval= in_interval)
 	print(stock)
-	
 
+	plt.cla()
 	plt.plot(stock['Adj Close'], label="Stock Price", color ="lightgray", zorder=2)
 
 	plt.legend(loc="upper left")
-	plt.show()
+	plt.title(company_name)
+	
 
-makeplot()
-
+ani = FuncAnimation(plt.gcf(), animate, interval=30000)
+plt.show()
 
 """
 u_ma1 = int(input("Enter First Moving Average : "))
